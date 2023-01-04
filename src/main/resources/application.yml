@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:jobxdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 200MB
+
+  jpa:
+database-platform: org.hibernate.dialect.H2Dialect
+
+jobx:
+  scheduling:
+    updateToStatusNew: "*/5 5 * * * *"
+    updateClosingDateDueCron: "*/5 10 * * * *"
+    permanentlyDeleteJobCron: "*/5 35 * * * *"
