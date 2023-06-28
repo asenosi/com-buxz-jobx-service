@@ -64,7 +64,7 @@ public class UserProfileController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            log.error("Failed to list all user profiles");
+            log.error("GetAllUserProfiles: Failed to list all user profiles : {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

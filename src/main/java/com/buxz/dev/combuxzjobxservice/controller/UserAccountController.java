@@ -28,6 +28,7 @@ public class UserAccountController {
         try {
             return new ResponseEntity<>(userService.createNewUserAccount(userAccountDto), HttpStatus.CREATED);
         } catch (Exception e) {
+            log.error("CreateUserAccount: Failed to create a user account : {}", e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -52,6 +53,7 @@ public class UserAccountController {
 
             return new ResponseEntity<>(userAccountList, HttpStatus.OK);
         } catch (Exception e) {
+            log.error("GetListOfUsers: Failed to retrieve list of user account : {}", e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
