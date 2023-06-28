@@ -19,13 +19,12 @@ import java.util.stream.Collectors;
 public class EducationService {
 
     private final EducationRepository educationRepository;
-    private final UserProfileRepository userProfileRepository;
     private final UserProfileService userProfileService;
 
     @Autowired
-    public EducationService(EducationRepository educationRepository, UserProfileRepository userProfileRepository, UserProfileService userProfileService) {
+    public EducationService(final EducationRepository educationRepository,
+                            final UserProfileService userProfileService) {
         this.educationRepository = educationRepository;
-        this.userProfileRepository = userProfileRepository;
         this.userProfileService = userProfileService;
     }
 
