@@ -21,11 +21,15 @@ import java.util.Optional;
 @RequestMapping("/v1/jobx/profile")
 public class UserProfileController {
 
-    @Autowired
-    private UserProfileService userProfileService;
+    private final UserProfileService userProfileService;
+    private final UserAccountService userAccountService;
 
     @Autowired
-    private UserAccountService userAccountService;
+    public UserProfileController(final UserProfileService userProfileService,
+                                 final UserAccountService userAccountService) {
+        this.userProfileService = userProfileService;
+        this.userAccountService = userAccountService;
+    }
 
     @PostMapping("/{accountid}/create")
     public ResponseEntity<UserProfileEntity> createUserProfile(@PathVariable("accountid") int accountid,

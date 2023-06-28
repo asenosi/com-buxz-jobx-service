@@ -22,12 +22,18 @@ import java.util.Optional;
 @RequestMapping("/v1/jobx/profile")
 public class WorkExperienceController {
 
+    private final WorkExperienceService workExperienceService;
+    private final UserProfileService userProfileService;
+    private final UploadService uploadService;
+
     @Autowired
-    private WorkExperienceService workExperienceService;
-    @Autowired
-    private UserProfileService userProfileService;
-    @Autowired
-    private UploadService uploadService;
+    public WorkExperienceController(final WorkExperienceService workExperienceService,
+                                    final UserProfileService userProfileService,
+                                    final UploadService uploadService) {
+        this.workExperienceService = workExperienceService;
+        this.userProfileService = userProfileService;
+        this.uploadService = uploadService;
+    }
 
     @PostMapping("/{userid}/work")
     private ResponseEntity<WorkExperienceEntity> addWorkExperience(@PathVariable("userid") int id, @RequestBody WorkExperienceDto workExperienceDto) {
