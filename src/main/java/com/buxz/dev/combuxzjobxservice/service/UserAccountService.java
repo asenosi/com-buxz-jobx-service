@@ -4,11 +4,11 @@ import com.buxz.dev.combuxzjobxservice.domain.UserAccountDto;
 import com.buxz.dev.combuxzjobxservice.entity.UserAccountEntity;
 import com.buxz.dev.combuxzjobxservice.entity.UserAccountFlatEntity;
 import com.buxz.dev.combuxzjobxservice.repository.UserRepository;
+import com.buxz.dev.combuxzjobxservice.mapper.UserAccountMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -19,19 +19,16 @@ import java.util.stream.Collectors;
 public class UserAccountService {
 
     private final UserRepository userRepository;
+    private final UserAccountMapper userAccountMapper;
 
     @Autowired
-    public UserAccountService(UserRepository userRepository) {
+    public UserAccountService(UserRepository userRepository, UserAccountMapper userAccountMapper) {
         this.userRepository = userRepository;
+        this.userAccountMapper = userAccountMapper;
     }
 
     public UserAccountEntity createNewUserAccount(UserAccountDto accountDto) {
-        UserAccountEntity userAccount = new UserAccountEntity();
-        userAccount.setEmail(accountDto.getEmail());
-        userAccount.setFirstName(accountDto.getFirstName());
-        userAccount.setLastName(accountDto.getLastName());
-        userAccount.setCellNumber(accountDto.getCellNumber());
-        userAccount.setDateCreated(LocalDateTime.now());
+        UserAccountEntity userAccount = userAccountMapper.toEntity(accountDto);
         userAccount.setUserName(createUserName(accountDto));
         log.info("CreatedNewUserAccount : Username {} created successfully", userAccount.getUserName());
         userRepository.save(userAccount);
@@ -62,10 +59,7 @@ public class UserAccountService {
 
     public UserAccountEntity updateUserAccount(int id, UserAccountDto userAccountDto) {
         UserAccountEntity accountToUpdate = userRepository.getById(id);
-        accountToUpdate.setEmail(userAccountDto.getEmail());
-        accountToUpdate.setCellNumber(userAccountDto.getCellNumber());
-        accountToUpdate.setLastName(userAccountDto.getLastName());
-        accountToUpdate.setFirstName(userAccountDto.getFirstName());
+        userAccountMapper.updateUserAccountFromDto(userAccountDto, accountToUpdate);
         userRepository.save(accountToUpdate);
         log.info("UpdateUserAccount : Record for Username {} updated successfully", accountToUpdate.getUserName());
         return accountToUpdate;

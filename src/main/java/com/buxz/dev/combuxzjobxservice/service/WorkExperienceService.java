@@ -2,11 +2,11 @@ package com.buxz.dev.combuxzjobxservice.service;
 
 import com.buxz.dev.combuxzjobxservice.domain.ResponseMessage;
 import com.buxz.dev.combuxzjobxservice.domain.WorkExperienceDto;
-import com.buxz.dev.combuxzjobxservice.entity.EducationEntity;
 import com.buxz.dev.combuxzjobxservice.entity.UserProfileEntity;
 import com.buxz.dev.combuxzjobxservice.entity.WorkExperienceEntity;
 import com.buxz.dev.combuxzjobxservice.repository.UserProfileRepository;
 import com.buxz.dev.combuxzjobxservice.repository.WorkExperienceRepository;
+import com.buxz.dev.combuxzjobxservice.mapper.WorkExperienceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,24 +20,21 @@ public class WorkExperienceService {
 
     private final WorkExperienceRepository workRepository;
     private final UserProfileRepository userProfileRepository;
+    private final WorkExperienceMapper workExperienceMapper;
 
     @Autowired
-    public WorkExperienceService(WorkExperienceRepository workRepository, UserProfileRepository userProfileRepository) {
+    public WorkExperienceService(WorkExperienceRepository workRepository, UserProfileRepository userProfileRepository,
+                                 WorkExperienceMapper workExperienceMapper) {
         this.workRepository = workRepository;
         this.userProfileRepository = userProfileRepository;
+        this.workExperienceMapper = workExperienceMapper;
     }
 
     public WorkExperienceEntity addWorkExperience(int id, WorkExperienceDto workDto) {
         Optional<UserProfileEntity> userProfile = userProfileRepository.findById(id);
-        WorkExperienceEntity workExperience = new WorkExperienceEntity();
+        WorkExperienceEntity workExperience = workExperienceMapper.toEntity(workDto);
         if (userProfile.isPresent()) {
             List<WorkExperienceEntity> currentWorkList= userProfile.get().getWorkExperienceEntity();
-            workExperience.setEmployer(workDto.getEmployer());
-            workExperience.setExperienceJobTitle(workDto.getExperienceJobTitle());
-            workExperience.setJobDescription(workDto.getJobDescription());
-            workExperience.setStartDate(workDto.getStartDate());
-            workExperience.setStillWorksHere(workDto.isStillWorksHere());
-            workExperience.setEndDate(workDto.getEndDate());
             currentWorkList.add(workExperience);
             workRepository.saveAndFlush(workExperience);
             userProfile.get().setWorkExperienceEntity(currentWorkList);
@@ -56,12 +53,7 @@ public class WorkExperienceService {
     public WorkExperienceEntity updateWorkExperience(int userId, int workId, WorkExperienceDto workExperienceDto) {
         Optional<WorkExperienceEntity> workExperience = workRepository.findById(workId);
         if (workExperience.isPresent()) {
-            workExperience.get().setEmployer(workExperienceDto.getEmployer());
-            workExperience.get().setExperienceJobTitle(workExperienceDto.getExperienceJobTitle());
-            workExperience.get().setEndDate(workExperienceDto.getEndDate());
-            workExperience.get().setStartDate(workExperienceDto.getStartDate());
-            workExperience.get().setJobDescription(workExperienceDto.getJobDescription());
-            workExperience.get().setStillWorksHere(workExperienceDto.isStillWorksHere());
+            workExperienceMapper.updateWorkExperienceFromDto(workExperienceDto, workExperience.get());
             workRepository.save(workExperience.get());
             log.info("UpdateWorkExperience : Added work experience to profile_id {}", userId);
         } else {
