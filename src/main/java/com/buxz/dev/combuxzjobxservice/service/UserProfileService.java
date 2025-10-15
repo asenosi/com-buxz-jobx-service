@@ -19,13 +19,15 @@ import java.util.Optional;
 public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
+
     @Autowired
-    private UserAccountService userAccountService;
+    private final UserAccountService userAccountService;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserProfileService(UserProfileRepository userProfileRepository, UserRepository userRepository) {
+    public UserProfileService(UserProfileRepository userProfileRepository, UserAccountService userAccountService, UserRepository userRepository) {
         this.userProfileRepository = userProfileRepository;
+        this.userAccountService = userAccountService;
         this.userRepository = userRepository;
     }
 
