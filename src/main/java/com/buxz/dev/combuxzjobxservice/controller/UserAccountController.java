@@ -79,6 +79,12 @@ public class UserAccountController {
         }
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUserAccount(@PathVariable("id") int id) {
+        userService.deleteUserAccountById(id);
+        return new ResponseEntity<>(HttpStatus.GONE);
+    }
+
     @GetMapping("/flat")
     public ResponseEntity<List<UserAccountFlatEntity>> getListOfAllUserInFlatJson() {
         try {
