@@ -41,7 +41,7 @@ class JobServiceTest {
         jobDto.setJobTitle("Software Engineer");
         jobDto.setJobDescription("Develop software");
         jobDto.setEmployer("Tech Corp");
-        jobDto.setJobType(JobType.FULL_TIME);
+        jobDto.setJobType(JobType.PARTTIME);
         jobDto.setSalary("50000");
         jobDto.setJobCity("Cape Town");
         jobDto.setClosingDate(LocalDate.now().plusDays(5));

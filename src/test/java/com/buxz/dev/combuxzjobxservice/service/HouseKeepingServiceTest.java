@@ -25,12 +25,6 @@ class HouseKeepingServiceTest {
     @Mock
     private JobRepository jobRepository;
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private UserProfileRepository userProfileRepository;
-
     @InjectMocks
     private HouseKeepingService houseKeepingService;
 
@@ -88,7 +82,7 @@ class HouseKeepingServiceTest {
 
         assertEquals(JobCurrentState.CLOSING_DATE_DUE, publishedDueJob.getJobState());
         assertEquals(JobCurrentState.CLOSING_DATE_OVERDUE, publishedOverdueJob.getJobState());
-        verify(jobRepository, times(2)).save(any(JobEntryEntity.class));
+        verify(jobRepository, times(3)).save(any(JobEntryEntity.class));
     }
 
     @Test
