@@ -6,6 +6,7 @@ import com.buxz.dev.combuxzjobxservice.entity.BusinessProfileEntity;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.BusinessCategory;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.SupportingImages;
+import com.buxz.dev.combuxzjobxservice.exception.NotFoundExeption;
 import com.buxz.dev.combuxzjobxservice.repository.BusinessProfileRepository;
 import com.buxz.dev.combuxzjobxservice.repository.ImageRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -89,9 +90,9 @@ public class BusinessProfileService {
             businessProfileToUpdate.get().setDeliver(businessProfileDto.isDeliver());
             businessProfileRepository.save(businessProfileToUpdate.get());
             log.info("UpdateBusinessProfile : Successfully updated a Business Profile with ID {} :", profileId);
-
         } else {
             log.info("UpdateBusinessProfile : Failed to update a cause UserProfile with Id : {} NOT_FOUND", profileId);
+            throw new NotFoundExeption("Business Profile not found");
         }
         return businessProfileToUpdate.get();
     }

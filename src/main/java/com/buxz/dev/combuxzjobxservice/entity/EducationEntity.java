@@ -2,12 +2,18 @@ package com.buxz.dev.combuxzjobxservice.entity;
 
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.LevelOfEducation;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "education_history")
 public class EducationEntity {
 

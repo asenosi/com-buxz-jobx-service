@@ -3,7 +3,10 @@ package com.buxz.dev.combuxzjobxservice.entity;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ContactDetails;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,6 +16,9 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_profile")
 public class UserProfileEntity {
 
