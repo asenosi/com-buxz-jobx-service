@@ -1,11 +1,13 @@
 package com.buxz.dev.combuxzjobxservice.domain;
 
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.LevelOfEducation;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
+@Builder
 public class EducationDto {
     private LevelOfEducation levelOfEducation;
     private String school;

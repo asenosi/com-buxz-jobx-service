@@ -5,9 +5,11 @@ import com.buxz.dev.combuxzjobxservice.entity.embeddables.BusinessCategory;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ContactDetails;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
 import jakarta.persistence.Embedded;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class BusinessProfileDto {
     private String businessName;
     private String businessOwner;
