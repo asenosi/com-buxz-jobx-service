@@ -2,21 +2,21 @@ package com.buxz.dev.combuxzjobxservice.repository;
 
 import com.buxz.dev.combuxzjobxservice.entity.JobEntryEntity;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.JobCurrentState;
-import com.buxz.dev.combuxzjobxservice.entity.embeddables.JobType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 class JobRepositoryTest {
 
     @Autowired

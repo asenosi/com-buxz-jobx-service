@@ -2,7 +2,7 @@ package com.buxz.dev.combuxzjobxservice.domain;
 
 import lombok.Data;
 
-import javax.persistence.Lob;
+import jakarta.persistence.Lob;
 
 @Data
 public class TestimonialDto {

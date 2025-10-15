@@ -3,7 +3,7 @@ package com.buxz.dev.combuxzjobxservice.entity.embeddables;
 import com.buxz.dev.combuxzjobxservice.entity.BusinessProfileEntity;
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Entity

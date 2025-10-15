@@ -50,7 +50,7 @@ public class UserAccountService {
     public List<UserAccountEntity> getAllUserAccountWithProfiles() {
         log.info("GetUserAccountsWithProfile : Attempting to retrieve all UserAccounts with userProfiles");
         return userRepository.findAll()
-                .parallelStream()
+                .stream()
                 .filter(userAccountEntity -> !userAccountEntity.getUserProfiles().isEmpty())
                 .collect(Collectors.toList());
     }
@@ -110,5 +110,10 @@ public class UserAccountService {
         String surNameCut = accountDto.getLastName().toUpperCase();
         String randomized = String.valueOf(1000 + random.nextInt(9999));
         return nameCut.substring(0,3).concat(surNameCut.substring(0,3)).concat(randomized);
+    }
+
+    public void deleteUserAccountById(int id) {
+        log.info("Deleting User Account with ID : {}", id);
+        userRepository.deleteById(id);
     }
 }

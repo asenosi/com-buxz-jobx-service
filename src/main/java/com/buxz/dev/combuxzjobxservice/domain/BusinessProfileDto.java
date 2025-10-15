@@ -4,9 +4,8 @@ import com.buxz.dev.combuxzjobxservice.entity.embeddables.BusinessAddress;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.BusinessCategory;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ContactDetails;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
+import jakarta.persistence.Embedded;
 import lombok.Data;
-
-import javax.persistence.Embedded;
 
 @Data
 public class BusinessProfileDto {
