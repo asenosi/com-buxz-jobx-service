@@ -2,7 +2,7 @@ package com.buxz.dev.combuxzjobxservice.entity.embeddables;
 
 import lombok.Data;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Data
 @Embeddable
