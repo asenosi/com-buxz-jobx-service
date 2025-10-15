@@ -5,7 +5,7 @@ import com.buxz.dev.combuxzjobxservice.domain.ResponseMessage;
 import com.buxz.dev.combuxzjobxservice.entity.EducationEntity;
 import com.buxz.dev.combuxzjobxservice.entity.UserProfileEntity;
 import com.buxz.dev.combuxzjobxservice.repository.EducationRepository;
-import com.buxz.dev.combuxzjobxservice.repository.UserProfileRepository;
+import com.buxz.dev.combuxzjobxservice.mapper.EducationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,24 +20,21 @@ public class EducationService {
 
     private final EducationRepository educationRepository;
     private final UserProfileService userProfileService;
+    private final EducationMapper educationMapper;
 
     @Autowired
     public EducationService(final EducationRepository educationRepository,
-                            final UserProfileService userProfileService) {
+                            final UserProfileService userProfileService,
+                            final EducationMapper educationMapper) {
         this.educationRepository = educationRepository;
         this.userProfileService = userProfileService;
+        this.educationMapper = educationMapper;
     }
 
     public EducationEntity addEducationEntry(int id, EducationDto educationDto) {
-        EducationEntity educationEntry = new EducationEntity();
+        EducationEntity educationEntry = educationMapper.toEntity(educationDto);
         Optional<UserProfileEntity> userProfile = userProfileService.getUserProfileById(id); //To Change
         List<EducationEntity> currentEducationHistory = userProfile.get().getEducationHistory();
-        educationEntry.setLevelOfEducation(educationDto.getLevelOfEducation());
-        educationEntry.setSchool(educationDto.getSchool());
-        educationEntry.setCurrentlyEnrolled(educationDto.isCurrentlyEnrolled());
-        educationEntry.setStartDate(educationDto.getStartDate());
-        educationEntry.setEndDate(educationDto.getEndDate());
-        educationEntry.setVisible(educationDto.isVisible());
         currentEducationHistory.add(educationEntry);
         userProfile.get().setEducationHistory(currentEducationHistory);
         educationRepository.save(educationEntry);
@@ -59,12 +56,7 @@ public class EducationService {
         Optional<UserProfileEntity> userProfile = userProfileService.getUserProfileById(id); //To Change
         List<EducationEntity> currentEducation = userProfile.get().getEducationHistory();
         EducationEntity education = educationRepository.findById(id).get();
-        education.setLevelOfEducation(educationDto.getLevelOfEducation());
-        education.setSchool(educationDto.getSchool());
-        education.setStartDate(educationDto.getStartDate());
-        education.setCurrentlyEnrolled(educationDto.isCurrentlyEnrolled());
-        education.setEndDate(educationDto.getEndDate());
-        education.setVisible(educationDto.isVisible());
+        educationMapper.updateEducationFromDto(educationDto, education);
         currentEducation.add(education);
         userProfile.get().setEducationHistory(currentEducation);
         log.info("UpdatedEducationEntry : Successfully updated a  UserProfile with Id : {}", userProfile.get().getId());
