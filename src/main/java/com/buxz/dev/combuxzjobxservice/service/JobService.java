@@ -5,19 +5,21 @@ import com.buxz.dev.combuxzjobxservice.domain.ResponseMessage;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.JobCurrentState;
 import com.buxz.dev.combuxzjobxservice.entity.JobEntryEntity;
 import com.buxz.dev.combuxzjobxservice.repository.JobRepository;
+import com.buxz.dev.combuxzjobxservice.mapper.JobMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JobService {
 
-    @Autowired JobRepository jobRepository;
+    private final JobRepository jobRepository;
+    private final JobMapper jobMapper;
 
     public List<JobEntryEntity> getAllAvailableJobs() {
         return jobRepository.findAll();
@@ -34,16 +36,7 @@ public class JobService {
     }
 
     public JobEntryEntity createNewJobEntry(JobDto jobDto) {
-        JobEntryEntity newJobEntry = new JobEntryEntity();
-        newJobEntry.setJobTitle(jobDto.getJobTitle());
-        newJobEntry.setJobDescription(jobDto.getJobDescription());
-        newJobEntry.setJobCity(jobDto.getJobCity());
-        newJobEntry.setEmployer(jobDto.getEmployer());
-        newJobEntry.setSalary(jobDto.getSalary());
-        newJobEntry.setJobType(jobDto.getJobType());
-        newJobEntry.setClosingDate(jobDto.getClosingDate());
-        newJobEntry.setJobState(JobCurrentState.CREATED);
-        newJobEntry.setDateCreated(LocalDateTime.now());
+        JobEntryEntity newJobEntry = jobMapper.toEntity(jobDto);
         jobRepository.save(newJobEntry);
         log.info("CreatedNewJobEntry : {} Created a new Job Entry", jobDto.getEmployer());
         return newJobEntry;
@@ -51,12 +44,7 @@ public class JobService {
 
     public JobEntryEntity updateJobEntry(int id, JobDto jobDto) {
         JobEntryEntity jobToUpdate = jobRepository.findById(id).get();
-        jobToUpdate.setJobTitle(jobDto.getJobTitle());
-        jobToUpdate.setJobDescription(jobDto.getJobDescription());
-        jobToUpdate.setJobCity(jobDto.getJobCity());
-        jobToUpdate.setEmployer(jobDto.getEmployer());
-        jobToUpdate.setSalary(jobDto.getSalary());
-        jobToUpdate.setJobType(jobDto.getJobType());
+        jobMapper.updateJobEntryFromDto(jobDto, jobToUpdate);
         jobRepository.save(jobToUpdate);
         log.info("UpdatedJobEntry : {} Updated a Job Entry for {} ", jobDto.getEmployer(), jobDto.getJobTitle());
         return jobToUpdate;

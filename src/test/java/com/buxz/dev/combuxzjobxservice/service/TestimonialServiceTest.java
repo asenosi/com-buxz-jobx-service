@@ -50,7 +50,7 @@ class TestimonialServiceTest {
 
         userProfile = new UserProfileEntity();
         userProfile.setId(1);
-        userProfile.setTestimonialEntity(new ArrayList<>());
+        userProfile.setTestimonialEntities(new ArrayList<>());
     }
 
     @Test
@@ -64,7 +64,7 @@ class TestimonialServiceTest {
         assertEquals(testimonialDto.getTestimonialBy(), result.getTestimonialBy());
         assertEquals(testimonialDto.getTestimonialSummary(), result.getTestimonialSummary());
         assertEquals(testimonialDto.getTestimonialDescription(), result.getTestimonialDescription());
-        assertTrue(userProfile.getTestimonialEntity().contains(result));
+        assertTrue(userProfile.getTestimonialEntities().contains(result));
         verify(testimonialRepository).saveAndFlush(result);
         verify(userProfileRepository).save(userProfile);
     }
@@ -129,8 +129,8 @@ class TestimonialServiceTest {
         ResponseMessage message = testimonialService.uploadTestimonial(1, file);
 
         assertEquals("Uploaded the file successfully: testimonial.txt", message.getMessage());
-        assertEquals(1, userProfile.getTestimonialEntity().size());
-        assertEquals("testimonial.txt", userProfile.getTestimonialEntity().get(0).getFileName());
+        assertEquals(1, userProfile.getTestimonialEntities().size());
+        assertEquals("testimonial.txt", userProfile.getTestimonialEntities().get(0).getFileName());
         verify(uploadService).uploadFile(file);
     }
 

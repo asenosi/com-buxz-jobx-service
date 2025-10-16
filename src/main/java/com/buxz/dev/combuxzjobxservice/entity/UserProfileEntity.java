@@ -40,7 +40,7 @@ public class UserProfileEntity {
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "user_profile_id", referencedColumnName = "id")
-    private List<TestimonialEntity> testimonialEntity;
+    private List<TestimonialEntity> testimonialEntities;
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "user_profile_id", referencedColumnName = "id")

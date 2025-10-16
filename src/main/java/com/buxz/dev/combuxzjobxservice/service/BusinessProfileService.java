@@ -9,6 +9,7 @@ import com.buxz.dev.combuxzjobxservice.entity.embeddables.SupportingImages;
 import com.buxz.dev.combuxzjobxservice.exception.NotFoundExeption;
 import com.buxz.dev.combuxzjobxservice.repository.BusinessProfileRepository;
 import com.buxz.dev.combuxzjobxservice.repository.ImageRepository;
+import com.buxz.dev.combuxzjobxservice.mapper.BusinessProfileMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,28 +27,19 @@ public class BusinessProfileService {
     private final BusinessProfileRepository businessProfileRepository;
     private final ImageRepository imageRepository;
     private final UploadService uploadService;
+    private final BusinessProfileMapper businessProfileMapper;
 
     @Autowired
-    public BusinessProfileService(BusinessProfileRepository businessProfileRepository, ImageRepository imageRepository, UploadService uploadService) {
+    public BusinessProfileService(BusinessProfileRepository businessProfileRepository, ImageRepository imageRepository,
+                                 UploadService uploadService, BusinessProfileMapper businessProfileMapper) {
         this.businessProfileRepository = businessProfileRepository;
         this.imageRepository = imageRepository;
         this.uploadService = uploadService;
+        this.businessProfileMapper = businessProfileMapper;
     }
 
     public BusinessProfileEntity createBusinessProfile(BusinessProfileDto businessProfileDto) {
-        BusinessProfileEntity businessProfile = BusinessProfileEntity.builder()
-                .businessName(businessProfileDto.getBusinessName())
-                .businessOwner(businessProfileDto.getBusinessOwner())
-                .businessCategory(businessProfileDto.getBusinessCategory())
-                .address((businessProfileDto.getAddress()))
-                .contactDetails(businessProfileDto.getContactDetails())
-                .businessStartDate(businessProfileDto.getBusinessStartDate())
-                .operationStartDate(businessProfileDto.getOperationStartDate())
-                .operationEndDate(businessProfileDto.getOperationEndDate())
-                .profileStatus(ProfileStatus.ACTIVE)
-                .showProfile(true)
-                .deliver((businessProfileDto.isDeliver()))
-                .build();
+        BusinessProfileEntity businessProfile = businessProfileMapper.toEntity(businessProfileDto);
         businessProfileRepository.save(businessProfile);
         log.info("CreateBusinessProfile : Successfully created a new Business Profile for Username : TOADD");
         return businessProfile;
@@ -78,16 +70,7 @@ public class BusinessProfileService {
     public BusinessProfileEntity updateBusinessProfile(int profileId, BusinessProfileDto businessProfileDto) {
         Optional<BusinessProfileEntity> businessProfileToUpdate = getBusinessProfileById(profileId);
         if(businessProfileToUpdate.isPresent()) {
-            businessProfileToUpdate.get().setBusinessName(businessProfileDto.getBusinessName());
-            businessProfileToUpdate.get().setBusinessOwner(businessProfileDto.getBusinessOwner());
-            businessProfileToUpdate.get().setBusinessCategory(businessProfileDto.getBusinessCategory());
-            businessProfileToUpdate.get().setAddress(businessProfileDto.getAddress());
-            businessProfileToUpdate.get().setContactDetails(businessProfileDto.getContactDetails());
-            businessProfileToUpdate.get().setBusinessStartDate(businessProfileDto.getBusinessStartDate());
-            businessProfileToUpdate.get().setOperationEndDate(businessProfileDto.getOperationStartDate());
-            businessProfileToUpdate.get().setOperationEndDate(businessProfileDto.getOperationEndDate());
-            businessProfileToUpdate.get().setProfileStatus(ProfileStatus.ACTIVE);
-            businessProfileToUpdate.get().setDeliver(businessProfileDto.isDeliver());
+            businessProfileMapper.updateBusinessProfileFromDto(businessProfileDto, businessProfileToUpdate.get());
             businessProfileRepository.save(businessProfileToUpdate.get());
             log.info("UpdateBusinessProfile : Successfully updated a Business Profile with ID {} :", profileId);
         } else {

@@ -110,7 +110,7 @@ class UserAccountServiceTest {
         profile.setDateOfBirth(LocalDate.of(1990, 1, 1));
         profile.setCity("City");
         profile.setEducationHistory(new ArrayList<>());
-        profile.setTestimonialEntity(new ArrayList<>());
+        profile.setTestimonialEntities(new ArrayList<>());
         profile.setWorkExperienceEntity(new ArrayList<>());
         withProfile.getUserProfiles().add(profile);
 
@@ -166,7 +166,7 @@ class UserAccountServiceTest {
         profile.setCity("Pretoria");
         profile.setEducationHistory(new ArrayList<>());
         profile.setWorkExperienceEntity(new ArrayList<>());
-        profile.setTestimonialEntity(new ArrayList<>());
+        profile.setTestimonialEntities(new ArrayList<>());
         account.getUserProfiles().add(profile);
 
         when(userRepository.findAll()).thenReturn(List.of(account));
@@ -200,7 +200,7 @@ class UserAccountServiceTest {
         profile.setCity("Durban");
         profile.setEducationHistory(new ArrayList<>());
         profile.setWorkExperienceEntity(new ArrayList<>());
-        profile.setTestimonialEntity(new ArrayList<>());
+        profile.setTestimonialEntities(new ArrayList<>());
         account.getUserProfiles().add(profile);
 
         when(userRepository.findById(7)).thenReturn(Optional.of(account));

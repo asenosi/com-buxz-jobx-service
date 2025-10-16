@@ -6,6 +6,7 @@ import com.buxz.dev.combuxzjobxservice.entity.TestimonialEntity;
 import com.buxz.dev.combuxzjobxservice.entity.UserProfileEntity;
 import com.buxz.dev.combuxzjobxservice.repository.TestimonialRepository;
 import com.buxz.dev.combuxzjobxservice.repository.UserProfileRepository;
+import com.buxz.dev.combuxzjobxservice.mapper.TestimonialMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,25 +22,25 @@ public class TestimonialService {
     private final TestimonialRepository testimonialRepository;
     private final UserProfileRepository userProfileRepository;
     private final UploadService uploadService;
+    private final TestimonialMapper testimonialMapper;
 
     @Autowired
-    public TestimonialService(TestimonialRepository testimonialRepository, UserProfileRepository userProfileRepository, UploadService uploadService) {
+    public TestimonialService(TestimonialRepository testimonialRepository, UserProfileRepository userProfileRepository,
+                              UploadService uploadService, TestimonialMapper testimonialMapper) {
         this.testimonialRepository = testimonialRepository;
         this.userProfileRepository = userProfileRepository;
         this.uploadService = uploadService;
+        this.testimonialMapper = testimonialMapper;
     }
 
     public TestimonialEntity addTestimonial(int id, TestimonialDto testimonialDto) {
         Optional<UserProfileEntity> userProfile = userProfileRepository.findById(id);
-        TestimonialEntity testimonial = new TestimonialEntity();
+        TestimonialEntity testimonial = testimonialMapper.toEntity(testimonialDto);
         if (userProfile.isPresent()) {
-            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntity();
-            testimonial.setTestimonialBy(testimonialDto.getTestimonialBy());
-            testimonial.setTestimonialSummary(testimonialDto.getTestimonialSummary());
-            testimonial.setTestimonialDescription(testimonialDto.getTestimonialDescription());
+            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntities();
             testimonialList.add(testimonial);
             testimonialRepository.saveAndFlush(testimonial);
-            userProfile.get().setTestimonialEntity(testimonialList);
+            userProfile.get().setTestimonialEntities(testimonialList);
             userProfileRepository.save(userProfile.get());
             log.info("AddTestimonial : Added testimonial to profile_id {}", id);
         } else {
@@ -51,9 +52,7 @@ public class TestimonialService {
     public TestimonialEntity updateTestimonial(int userId, int testimonyId, TestimonialDto testimonialDto) {
         Optional<TestimonialEntity> testimonial = testimonialRepository.findById(testimonyId);
         if (testimonial.isPresent()) {
-            testimonial.get().setTestimonialBy(testimonialDto.getTestimonialBy());
-            testimonial.get().setTestimonialSummary(testimonialDto.getTestimonialSummary());
-            testimonial.get().setTestimonialDescription(testimonialDto.getTestimonialDescription());
+            testimonialMapper.updateTestimonialFromDto(testimonialDto, testimonial.get());
             testimonialRepository.save(testimonial.get());
             log.info("UpdateTestimonial : Updated testimonial for profile_id {}", userId);
         } else {
@@ -75,12 +74,12 @@ public class TestimonialService {
         Optional<UserProfileEntity> userProfile = userProfileRepository.findById(userId);
         TestimonialEntity testimonial = new TestimonialEntity();
         if (userProfile.isPresent()) {
-            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntity();
+            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntities();
             testimonial.setFileName(file.getOriginalFilename());
             uploadService.uploadFile(file);
             testimonialList.add(testimonial);
             testimonialRepository.saveAndFlush(testimonial);
-            userProfile.get().setTestimonialEntity(testimonialList);
+            userProfile.get().setTestimonialEntities(testimonialList);
             userProfileRepository.save(userProfile.get());
             log.info("UploadAddTestimonial : Added testimonial to profile_id {}", userId);
             return new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename());

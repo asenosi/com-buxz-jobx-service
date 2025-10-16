@@ -6,6 +6,7 @@ import com.buxz.dev.combuxzjobxservice.entity.WorkExperienceEntity;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class UserProfileDto {
@@ -15,6 +16,6 @@ public class UserProfileDto {
     private String city;
     boolean showProfile = true;
     private ContactDetails contactDetails;
-    private TestimonialEntity testimonialEntity;
-    private WorkExperienceEntity workExperienceEntity;
+    private List<TestimonialEntity> testimonialEntities;
+    private List<WorkExperienceEntity> workExperienceEntity;
 }

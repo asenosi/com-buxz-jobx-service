@@ -7,6 +7,7 @@ import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
 import com.buxz.dev.combuxzjobxservice.entity.UserProfileEntity;
 import com.buxz.dev.combuxzjobxservice.repository.UserProfileRepository;
 import com.buxz.dev.combuxzjobxservice.repository.UserRepository;
+import com.buxz.dev.combuxzjobxservice.mapper.UserProfileMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,27 +24,25 @@ public class UserProfileService {
     @Autowired
     private final UserAccountService userAccountService;
     private final UserRepository userRepository;
+    private final UserProfileMapper userProfileMapper;
 
     @Autowired
-    public UserProfileService(UserProfileRepository userProfileRepository, UserAccountService userAccountService, UserRepository userRepository) {
+    public UserProfileService(UserProfileRepository userProfileRepository,
+                              UserAccountService userAccountService,
+                              UserRepository userRepository,
+                              UserProfileMapper userProfileMapper) {
         this.userProfileRepository = userProfileRepository;
         this.userAccountService = userAccountService;
         this.userRepository = userRepository;
+        this.userProfileMapper = userProfileMapper;
     }
 
     public UserProfileEntity createUserProfile(int accountId, UserProfileDto userProfileDto) {
         Optional<UserAccountEntity> userAccount = userAccountService.getUserAccountById(accountId);
-        UserProfileEntity userProfile = new UserProfileEntity();
+        UserProfileEntity userProfile = userProfileMapper.toEntity(userProfileDto);
         if (userAccount.isPresent()) {
             List<UserProfileEntity> accountUserProfiles = userAccount.get().getUserProfiles();
             userProfile.setId(userAccount.get().getId());
-            userProfile.setShowProfile(userProfileDto.isShowProfile());
-            userProfile.setCity(userProfileDto.getCity());
-            userProfile.setJobTitle(userProfileDto.getJobTitle());
-            userProfile.setProfileSummary(userProfileDto.getProfileSummary());
-            userProfile.setContactDetails(userProfileDto.getContactDetails());
-            userProfile.setDateOfBirth(userProfileDto.getDateOfBirth());
-            userProfile.setProfileStatus(ProfileStatus.ACTIVE);
             userProfileRepository.save(userProfile);
             accountUserProfiles.add(userProfile);
             userAccount.get().setUserProfiles(accountUserProfiles);
@@ -64,7 +63,16 @@ public class UserProfileService {
     }
 
     public UserProfileEntity updateUserProfile(int id, UserProfileDto userProfileDto) {
-        return new UserProfileEntity();
+        Optional<UserProfileEntity> userProfileEntity = userProfileRepository.findById(id);
+        if (userProfileEntity.isPresent()) {
+            userProfileMapper.updateUserProfileFromDto(userProfileDto, userProfileEntity.get());
+            userProfileRepository.save(userProfileEntity.get());
+            log.info("UpdateUserProfile : Successfully updated profile with Id : {}", id);
+            return userProfileEntity.get();
+        } else {
+            log.warn("UpdateUserProfile : Failed to update profile with Id : {} - NOT_FOUND", id);
+            return new UserProfileEntity();
+        }
     }
 
     public ResponseMessage deactivateUserProfile(int id) {
