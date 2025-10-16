@@ -21,15 +21,15 @@ public class JobEntryEntity {
     private String jobTitle;
     private String jobDescription;
     private String employer;
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     private JobType jobType;
     private String salary;
     private String jobCity;
     private LocalDate closingDate;
-
-    @Enumerated(EnumType.STRING)
+//
+//    @Enumerated(EnumType.STRING)
     private JobCurrentState jobState;
-    private boolean published = false;
+    private boolean published;
     private LocalDateTime dateCreated;
 
     public JobEntryEntity() {

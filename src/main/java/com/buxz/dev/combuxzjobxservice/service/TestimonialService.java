@@ -37,10 +37,10 @@ public class TestimonialService {
         Optional<UserProfileEntity> userProfile = userProfileRepository.findById(id);
         TestimonialEntity testimonial = testimonialMapper.toEntity(testimonialDto);
         if (userProfile.isPresent()) {
-            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntity();
+            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntities();
             testimonialList.add(testimonial);
             testimonialRepository.saveAndFlush(testimonial);
-            userProfile.get().setTestimonialEntity(testimonialList);
+            userProfile.get().setTestimonialEntities(testimonialList);
             userProfileRepository.save(userProfile.get());
             log.info("AddTestimonial : Added testimonial to profile_id {}", id);
         } else {
@@ -74,12 +74,12 @@ public class TestimonialService {
         Optional<UserProfileEntity> userProfile = userProfileRepository.findById(userId);
         TestimonialEntity testimonial = new TestimonialEntity();
         if (userProfile.isPresent()) {
-            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntity();
+            List<TestimonialEntity> testimonialList = userProfile.get().getTestimonialEntities();
             testimonial.setFileName(file.getOriginalFilename());
             uploadService.uploadFile(file);
             testimonialList.add(testimonial);
             testimonialRepository.saveAndFlush(testimonial);
-            userProfile.get().setTestimonialEntity(testimonialList);
+            userProfile.get().setTestimonialEntities(testimonialList);
             userProfileRepository.save(userProfile.get());
             log.info("UploadAddTestimonial : Added testimonial to profile_id {}", userId);
             return new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename());

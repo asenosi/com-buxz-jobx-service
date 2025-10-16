@@ -1,21 +1,26 @@
 package com.buxz.dev.combuxzjobxservice.mapper;
 
+import com.buxz.dev.combuxzjobxservice.domain.TestimonialDto;
 import com.buxz.dev.combuxzjobxservice.domain.UserProfileDto;
+import com.buxz.dev.combuxzjobxservice.domain.WorkExperienceDto;
+import com.buxz.dev.combuxzjobxservice.entity.TestimonialEntity;
 import com.buxz.dev.combuxzjobxservice.entity.UserProfileEntity;
+import com.buxz.dev.combuxzjobxservice.entity.WorkExperienceEntity;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+import java.util.List;
+
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        unmappedSourcePolicy = ReportingPolicy.ERROR)
 public interface UserProfileMapper {
 
-    @Mapping(target = "testimonialEntity", ignore = true)
-    @Mapping(target = "workExperienceEntity", ignore = true)
     @Mapping(target = "educationHistory", ignore = true)
-    @Mapping(target = "profileStatus", expression = "java(ProfileStatus.ACTIVE)")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "profileStatus", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "updatedDate", ignore = true)
     UserProfileEntity toEntity(UserProfileDto userProfileDto);
 
     @BeanMapping(ignoreByDefault = true)
@@ -26,4 +31,13 @@ public interface UserProfileMapper {
     @Mapping(target = "showProfile")
     @Mapping(target = "contactDetails")
     void updateUserProfileFromDto(UserProfileDto userProfileDto, @MappingTarget UserProfileEntity userProfileEntity);
+
+    @Mapping(target = "id", ignore = true)
+    TestimonialEntity toTestimonialEntity(TestimonialDto testimonialDto);
+    List<TestimonialEntity> toTestimonialEntitiesList(List<TestimonialDto> testimonialDtoList);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userProfile", ignore = true)
+    WorkExperienceEntity toWorkExperienceEntity(WorkExperienceDto workExperienceDto);
+    List<WorkExperienceEntity> toWorkExperienceEntitiesLit(List<WorkExperienceDto> workExperienceDtos);
 }

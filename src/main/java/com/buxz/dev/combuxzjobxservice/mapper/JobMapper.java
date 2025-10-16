@@ -3,19 +3,15 @@ package com.buxz.dev.combuxzjobxservice.mapper;
 import com.buxz.dev.combuxzjobxservice.domain.JobDto;
 import com.buxz.dev.combuxzjobxservice.entity.JobEntryEntity;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.JobCurrentState;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        unmappedSourcePolicy = ReportingPolicy.ERROR)
 public interface JobMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "jobState", expression = "java(JobCurrentState.CREATED)")
-    @Mapping(target = "published", constant = "false")
-    @Mapping(target = "dateCreated", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "dateCreated", ignore = true)
     JobEntryEntity toEntity(JobDto jobDto);
 
     @BeanMapping(ignoreByDefault = true)

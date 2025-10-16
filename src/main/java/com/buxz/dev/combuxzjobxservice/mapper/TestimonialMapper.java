@@ -2,13 +2,11 @@ package com.buxz.dev.combuxzjobxservice.mapper;
 
 import com.buxz.dev.combuxzjobxservice.domain.TestimonialDto;
 import com.buxz.dev.combuxzjobxservice.entity.TestimonialEntity;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        unmappedSourcePolicy = ReportingPolicy.ERROR)
 public interface TestimonialMapper {
 
     @Mapping(target = "id", ignore = true)

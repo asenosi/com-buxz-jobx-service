@@ -3,18 +3,16 @@ package com.buxz.dev.combuxzjobxservice.mapper;
 import com.buxz.dev.combuxzjobxservice.domain.BusinessProfileDto;
 import com.buxz.dev.combuxzjobxservice.entity.BusinessProfileEntity;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.ERROR,
+        unmappedSourcePolicy = ReportingPolicy.ERROR
+)
 public interface BusinessProfileMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "imagesList", ignore = true)
-    @Mapping(target = "profileStatus", expression = "java(ProfileStatus.ACTIVE)")
     @Mapping(target = "showProfile", constant = "true")
     BusinessProfileEntity toEntity(BusinessProfileDto businessProfileDto);
 
@@ -28,7 +26,6 @@ public interface BusinessProfileMapper {
     @Mapping(target = "operationStartDate")
     @Mapping(target = "operationEndDate")
     @Mapping(target = "deliver")
-    @Mapping(target = "profileStatus", expression = "java(ProfileStatus.ACTIVE)")
     void updateBusinessProfileFromDto(BusinessProfileDto businessProfileDto,
                                       @MappingTarget BusinessProfileEntity businessProfileEntity);
 }
