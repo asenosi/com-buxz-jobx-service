@@ -4,7 +4,6 @@ import com.buxz.dev.combuxzjobxservice.domain.BusinessProfileDto;
 import com.buxz.dev.combuxzjobxservice.domain.ResponseMessage;
 import com.buxz.dev.combuxzjobxservice.entity.BusinessProfileEntity;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.BusinessCategory;
-import com.buxz.dev.combuxzjobxservice.entity.embeddables.ProfileStatus;
 import com.buxz.dev.combuxzjobxservice.entity.embeddables.SupportingImages;
 import com.buxz.dev.combuxzjobxservice.exception.NotFoundExeption;
 import com.buxz.dev.combuxzjobxservice.repository.BusinessProfileRepository;
