@@ -27,7 +27,10 @@ public class UserProfileService {
     private final UserProfileMapper userProfileMapper;
 
     @Autowired
-    public UserProfileService(UserProfileRepository userProfileRepository, UserAccountService userAccountService, UserRepository userRepository) {
+    public UserProfileService(UserProfileRepository userProfileRepository,
+                              UserAccountService userAccountService,
+                              UserRepository userRepository,
+                              UserProfileMapper userProfileMapper) {
         this.userProfileRepository = userProfileRepository;
         this.userAccountService = userAccountService;
         this.userRepository = userRepository;
